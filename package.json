@@ -1,0 +1,23 @@
+{
+  "name": "Discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Preetesh21/Discord.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Preetesh21/Discord/issues"
+  },
+  "homepage": "https://github.com/Preetesh21/Discord#readme",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  }
+}

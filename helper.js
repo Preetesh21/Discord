@@ -82,6 +82,10 @@ const getValidUrl = (url) => {
 }
 
 const app = async(url) => {
+    var d = new Date();
+    if (d.getMonth() + 1 != 10) {
+        return "Try in OCtober!!!"
+    }
     if (!getValidUrl(url)) {
         return "It's not a Github Repository Link!!!"
     }
@@ -105,7 +109,6 @@ const app = async(url) => {
             topics,
             topic: hasTopic(topics),
             tag_prs: hasTaggedPrs(pulls),
-            recent_prs: false, // todo: return true if it has any PRs approved/merged in the last X days - probably won't do this
             open_help_wanted_issue_count: repo.open_issues_count,
             repo_updated_at: repo.updated_at,
             language: repo.language,
@@ -126,6 +129,7 @@ const app = async(url) => {
 
     } catch (error) {
         console.log(error)
+        return "Some Error Occurred."
     }
 }
 module.exports = app;

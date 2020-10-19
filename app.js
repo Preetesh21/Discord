@@ -10,10 +10,11 @@ client.on('ready', () => {
     console.log(`${client.user.tag} has logged in.`)
 })
 
-client.on('message', (message) => {
+client.on('message', async(message) => {
     if (message.author.bot) {
         return;
     }
-    console.log("Message sent is.", );
-    helper(message.content);
+    console.log("Message sent is.", message.content);
+    var ans = await helper(message.content);
+    message.reply(ans);
 })

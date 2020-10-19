@@ -11,10 +11,15 @@ const validUrlPrefix = 'https://github.com/'
 const moderationAccount = 'hacktoberfest-team'
 
 const getRepo = async(owner, repo) => {
-    return await octokit.repos.get({
-        owner,
-        repo,
-    })
+    try {
+        return await octokit.repos.get({
+            owner,
+            repo,
+        })
+    } catch (err) {
+        console.log("Not a Repo")
+    }
+    return false;
 }
 
 const getTopics = async(repo) => {
@@ -64,7 +69,7 @@ const hasTaggedPrs = (pulls) => {
 
 const getValidUrl = (url) => {
     if (!url.startsWith(validUrlPrefix)) {
-        throw new Error("It's not a GitHub repository URL!")
+        return false;
     }
 
     url = new URL(url)
@@ -77,8 +82,14 @@ const getValidUrl = (url) => {
 }
 
 const app = async(url) => {
+    if (!getValidUrl(url)) {
+        return "It's not a Github Repository Link!!!"
+    }
     try {
         const { repoOwner, repoName } = getValidUrl(url)
+        if ((repoName === undefined || repoOwner === undefined) || !(await getRepo(repoOwner, repoName))) {
+            return "It's not a valid Github Repository!!!"
+        }
         const { data: repo } = await getRepo(repoOwner, repoName)
         const topics = await getTopics(repo)
         const pulls = await getPulls(repo)
@@ -106,9 +117,11 @@ const app = async(url) => {
         }
         console.log(body)
         if (body.topic || body.tag_prs && !banned) {
-            console.log("Eligible")
+            console.log("Eligible");
+            return "The repository is Eligible";
         } else {
-            console.log("Not Eligible.")
+            console.log("Not Eligible.");
+            return "The repository is Not Eligible";
         }
 
     } catch (error) {

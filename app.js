@@ -19,11 +19,24 @@ client.on("guildMemberAdd", (member) => {
     flag = true;
     if (newUsers[guild.id].size > 0) {
         const userlist = newUsers[guild.id].map(u => u.toString()).join(" ");
-        guild.channels.cache.find(channel => channel.name === "general").send("Welcome our new user!\n" + userlist + `\n Hii ${userlist} I am a hacktoberfest repository checker :)`);
+        guild.channels.cache.find(channel => channel.name === "general").send("Welcome our new user!\n" + userlist + `\n Hii ${userlist} I am a hacktoberfest repository checker bot which tells using the Github Repository link if a repository is valid for HacktoberFest. :)`);
         newUsers[guild.id].clear();
 
     }
 });
+
+client.on("guildCreate", guild => {
+    let defaultChannel = "";
+    guild.channels.cache.forEach((channel) => {
+        if (channel.type == "text" && defaultChannel == "") {
+            if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+                defaultChannel = channel;
+            }
+        }
+    })
+    defaultChannel.send('Hello, Im a Bot!\nI am here to tell if a github repository is valid for hacktoberfest or not by just using the repository link.:)')
+});
+
 
 client.on('message', async(message) => {
     if (message.author.bot || flag) {

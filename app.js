@@ -1,4 +1,5 @@
 const discord = require('discord.js');
+const helper = require('./helper.js')
 require('dotenv').config();
 
 const client = new discord.Client();
@@ -13,5 +14,6 @@ client.on('message', (message) => {
     if (message.author.bot) {
         return;
     }
-    console.log("Message sent is.", message.content)
+    console.log("Message sent is.", );
+    helper(message.content);
 })

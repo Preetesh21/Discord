@@ -1,14 +1,4 @@
-/*
-{
-    "path": "Path parameter",
-    "httpMethod": "Incoming request's method name"
-    "headers": {Incoming request headers}
-    "queryStringParameters": {query string parameters }
-    "body": "A JSON string of the request payload."
-    "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
-}
-*/
-
+require('dotenv').config
 const { Octokit } = require('@octokit/rest')
 
 const octokit = new Octokit({
@@ -86,49 +76,43 @@ const getValidUrl = (url) => {
     }
 }
 
-// exports.handler = async(event, context, callback) => {
-const app = async() => {
-        try {
-            const { repoOwner, repoName } = getValidUrl('https://github.com/lukeocodes/hacktoberfest-checker')
-            console.log(repoName, repoOwner)
-            const { data: repo } = await getRepo(repoOwner, repoName)
-            const topics = await getTopics(repo)
-            const pulls = await getPulls(repo)
-                // const openHelpWantedIssues = await getOpenHelpWantedIssues(repo)
-            const bannedIssues = await getBannedIssues(repo)
-            const isBanned = bannedIssues.length > 0
+const app = async(url) => {
+    try {
+        const { repoOwner, repoName } = getValidUrl(url)
+        const { data: repo } = await getRepo(repoOwner, repoName)
+        const topics = await getTopics(repo)
+        const pulls = await getPulls(repo)
+        const bannedIssues = await getBannedIssues(repo)
+        const isBanned = bannedIssues.length > 0
 
-            const body = {
-                name: repo.name,
-                long_name: `${repoOwner}/${repoName}`,
-                description: repo.description,
-                url: repo.html_url,
-                requested_at: new Date(),
-                topics,
-                topic: hasTopic(topics),
-                tag_prs: hasTaggedPrs(pulls),
-                recent_prs: false, // todo: return true if it has any PRs approved/merged in the last X days - probably won't do this
-                open_help_wanted_issue_count: repo.open_issues_count,
-                repo_updated_at: repo.updated_at,
-                language: repo.language,
-                license: repo.license,
-                forks: repo.forks,
-                stargazers_count: repo.stargazers_count,
-                banned: isBanned,
-                banned_url: isBanned ? bannedIssues.shift().html_url : null,
-            }
-            console.log(body)
-                // callback(null, {
-                //     statusCode: 200,
-                //     body: JSON.stringify(body),
-                // })
-        } catch (error) {
-            console.log(error)
-                // callback(null, {
-                //     statusCode: 500,
-                //     body: JSON.stringify({...error, message: error.errorMessage }),
-                // })
+        const body = {
+            name: repo.name,
+            long_name: `${repoOwner}/${repoName}`,
+            description: repo.description,
+            url: repo.html_url,
+            requested_at: new Date(),
+            topics,
+            topic: hasTopic(topics),
+            tag_prs: hasTaggedPrs(pulls),
+            recent_prs: false, // todo: return true if it has any PRs approved/merged in the last X days - probably won't do this
+            open_help_wanted_issue_count: repo.open_issues_count,
+            repo_updated_at: repo.updated_at,
+            language: repo.language,
+            license: repo.license,
+            forks: repo.forks,
+            stargazers_count: repo.stargazers_count,
+            banned: isBanned,
+            banned_url: isBanned ? bannedIssues.shift().html_url : null,
         }
+        console.log(body)
+        if (body.topic || body.tag_prs && !banned) {
+            console.log("Eligible")
+        } else {
+            console.log("Not Eligible.")
+        }
+
+    } catch (error) {
+        console.log(error)
     }
-    // }
-app();
+}
+module.exports = app;

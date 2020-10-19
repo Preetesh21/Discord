@@ -101,24 +101,24 @@ const app = async(url) => {
         const isBanned = bannedIssues.length > 0
 
         const body = {
-            name: repo.name,
-            long_name: `${repoOwner}/${repoName}`,
-            description: repo.description,
-            url: repo.html_url,
-            requested_at: new Date(),
-            topics,
-            topic: hasTopic(topics),
-            tag_prs: hasTaggedPrs(pulls),
-            open_help_wanted_issue_count: repo.open_issues_count,
-            repo_updated_at: repo.updated_at,
-            language: repo.language,
-            license: repo.license,
-            forks: repo.forks,
-            stargazers_count: repo.stargazers_count,
-            banned: isBanned,
-            banned_url: isBanned ? bannedIssues.shift().html_url : null,
-        }
-        console.log(body)
+                name: repo.name,
+                long_name: `${repoOwner}/${repoName}`,
+                description: repo.description,
+                url: repo.html_url,
+                requested_at: new Date(),
+                topics,
+                topic: hasTopic(topics),
+                tag_prs: hasTaggedPrs(pulls),
+                open_help_wanted_issue_count: repo.open_issues_count,
+                repo_updated_at: repo.updated_at,
+                language: repo.language,
+                license: repo.license,
+                forks: repo.forks,
+                stargazers_count: repo.stargazers_count,
+                banned: isBanned,
+                banned_url: isBanned ? bannedIssues.shift().html_url : null,
+            }
+            //console.log(body)
         if (body.topic || body.tag_prs && !banned) {
             console.log("Eligible");
             return "The repository is Eligible";

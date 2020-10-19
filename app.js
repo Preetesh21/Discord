@@ -6,7 +6,7 @@ const newUsers = [];
 var flag = false;
 
 const client = new discord.Client();
-console.log(process.env.Bot_Token)
+//console.log(process.env.Bot_Token)
 client.login(process.env.Bot_Token);
 
 client.on('ready', () => {
@@ -43,8 +43,8 @@ client.on('message', async(message) => {
         flag = false;
         return;
     }
-    console.log(flag)
-    console.log("Message sent is.", message.content);
+    //console.log(flag)
+    //console.log("Message sent is.", message.content);
     var ans = await helper(message.content);
     message.reply(ans);
 })
